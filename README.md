@@ -12,7 +12,20 @@ Some helpful examples are available in [the examples folder](./examples)
 
 ### Create Invoice
 
+```go
+client = client.WithBaseURL("http://localhost:8282")
 
+invoice, err := client.CreateInvoice({
+    Description: "Drugqs"
+    Amount: 100000,
+})
+if err != nil {
+    panic(err)
+}
+
+fmt.Println(invoice.Serialized)
+
+```
 
 
 #### Watching Events
