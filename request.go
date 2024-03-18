@@ -1,8 +1,6 @@
 package eclair
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -13,22 +11,17 @@ func (c *Client) Get(path string, response interface{}) ([]byte, error) {
 	return c.Request(http.MethodGet, path, nil, response)
 }
 
-func (c *Client) Post(path string, body interface{}, response interface{}) ([]byte, error) {
-	return c.Request(http.MethodPost, path, body, response)
+func (c *Client) Post(path string, data io.Reader, response interface{}) ([]byte, error) {
+	return c.Request(http.MethodPost, path, data, response)
 }
-func (c *Client) Request(method, path string, body interface{}, response interface{}) ([]byte, error) {
-	reqBody, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-
+func (c *Client) Request(method, path string, data io.Reader, response interface{}) ([]byte, error) {
 	path = strings.TrimPrefix(path, "/")
 	url := strings.TrimSuffix(c.BaseURL, "/") + "/" + path
 
 	req, err := http.NewRequest(
 		method,
 		url,
-		bytes.NewBuffer(reqBody),
+		data,
 	)
 	if err != nil {
 		return nil, err
@@ -49,18 +42,14 @@ func (c *Client) Request(method, path string, body interface{}, response interfa
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
-	}
-
-	data, err := io.ReadAll(resp.Body)
+	d, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	if c.Debug {
-		fmt.Println(string(data))
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf(string(d))
 	}
 
-	return data, nil
+	return d, nil
 }
