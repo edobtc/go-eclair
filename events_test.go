@@ -27,6 +27,7 @@ func TestUnmarshalEvent(t *testing.T) {
 		},
 	}
 
+	//nolint:staticcheck
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			actual, err := UnmarshalEvent(tt.data)
