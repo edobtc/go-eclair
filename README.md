@@ -59,12 +59,13 @@ To open a channel and watch for events
     // example fo handling events
 	for message := range channel {
 		switch message.Type {
-            case eclair.ChannelOpened:
-                // handle channel opened event
-            case eclair.ChannelClosed:
-                // handle channel closed event
-            case eclair.PaymentReceived
-                // handle channel closed event
+        case eclair.ChannelOpened:
+            // handle channel opened event
+        case eclair.ChannelClosed:
+            // handle channel closed event
+        case eclair.PaymentReceived
+            // handle channel closed event
+        //...etc for all/any message type
 		}
 	}
 ```
