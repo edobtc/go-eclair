@@ -106,7 +106,6 @@ func (c *DeleteInvoiceRequest) FormData() (io.Reader, error) {
 }
 
 func (c *Client) DeleteInvoice(settings DeleteInvoiceRequest) (*DeleteInvoiceResponse, error) {
-
 	data, err := settings.FormData()
 	if err != nil {
 		return nil, err

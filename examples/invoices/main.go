@@ -31,4 +31,26 @@ func main() {
 
 	fmt.Println(dresp.Message)
 
+	// Create Invoice
+
+	resp, err = client.CreateInvoice(eclair.CreateInvoiceRequest{
+		Description: "test6",
+		Amount:      169420,
+	})
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	presp, err := client.PayInvoice(eclair.PayInvoiceRequest{
+		Invoice: resp.Serialized,
+	})
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(presp.Message)
+
 }

@@ -24,9 +24,16 @@ if err != nil {
 }
 
 fmt.Println(invoice.Serialized)
-
 ```
 
+### Pay Invoice
+
+```go
+resp, err := client.PayInvoice(eclair.PayInvoiceRequest{
+    Invoice: resp.Serialized,
+})
+fmt.Println(resp.Message)
+```
 
 #### Watching Events
 
