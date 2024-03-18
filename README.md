@@ -55,24 +55,24 @@ It is possible to listen for a handful of events that the node emits. This is do
 To open a channel and watch for events
 
 ```go
-    client = client.WithBaseURL("http://localhost:8282") // if you are using polar for a local setup
+client = client.WithBaseURL("http://localhost:8282") // if you are using polar for a local setup
 
-	channel, err := client.Subscribe()
-	if err != nil {
-		panic(err)
-		return
-	}
+channel, err := client.Subscribe()
+if err != nil {
+    panic(err)
+    return
+}
 
-    // example fo handling events
-	for message := range channel {
-		switch message.Type {
-        case eclair.ChannelOpened:
-            // handle channel opened event
-        case eclair.ChannelClosed:
-            // handle channel closed event
-        case eclair.PaymentReceived
-            // handle channel closed event
-        //...etc for all/any message type
-		}
-	}
+// example fo handling events
+for message := range channel {
+    switch message.Type {
+    case eclair.ChannelOpened:
+        // handle channel opened event
+    case eclair.ChannelClosed:
+        // handle channel closed event
+    case eclair.PaymentReceived
+        // handle channel closed event
+    //...etc for all/any message type
+    }
+}
 ```
