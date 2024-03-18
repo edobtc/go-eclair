@@ -48,7 +48,7 @@ func ToString(kind eventType) string {
 }
 
 type Message struct {
-	Type string `json:"type"`
+	Type eventType `json:"type"`
 	Data interface{}
 }
 
@@ -99,7 +99,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 			return nil, err
 		}
 		return &Message{
-			Type: baseEvent.Type,
+			Type: ToEventType(baseEvent.Type),
 			Data: event,
 		}, nil
 	case "payment-relayed":
@@ -108,7 +108,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 			return nil, err
 		}
 		return &Message{
-			Type: baseEvent.Type,
+			Type: ToEventType(baseEvent.Type),
 			Data: event,
 		}, nil
 
@@ -118,7 +118,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 			return nil, err
 		}
 		return &Message{
-			Type: baseEvent.Type,
+			Type: ToEventType(baseEvent.Type),
 			Data: event,
 		}, nil
 
@@ -128,7 +128,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 			return nil, err
 		}
 		return &Message{
-			Type: baseEvent.Type,
+			Type: ToEventType(baseEvent.Type),
 			Data: event,
 		}, nil
 
@@ -138,7 +138,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 			return nil, err
 		}
 		return &Message{
-			Type: baseEvent.Type,
+			Type: ToEventType(baseEvent.Type),
 			Data: event,
 		}, nil
 
@@ -148,7 +148,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 			return nil, err
 		}
 		return &Message{
-			Type: baseEvent.Type,
+			Type: ToEventType(baseEvent.Type),
 			Data: event,
 		}, nil
 
@@ -158,7 +158,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 			return nil, err
 		}
 		return &Message{
-			Type: baseEvent.Type,
+			Type: ToEventType(baseEvent.Type),
 			Data: event,
 		}, nil
 
@@ -168,7 +168,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 			return nil, err
 		}
 		return &Message{
-			Type: baseEvent.Type,
+			Type: ToEventType(baseEvent.Type),
 			Data: event,
 		}, nil
 
@@ -178,7 +178,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 			return nil, err
 		}
 		return &Message{
-			Type: baseEvent.Type,
+			Type: ToEventType(baseEvent.Type),
 			Data: event,
 		}, nil
 
@@ -188,7 +188,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 			return nil, err
 		}
 		return &Message{
-			Type: baseEvent.Type,
+			Type: ToEventType(baseEvent.Type),
 			Data: event,
 		}, nil
 

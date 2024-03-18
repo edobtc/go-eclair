@@ -16,7 +16,7 @@ func TestUnmarshalEvent(t *testing.T) {
 			name: "PaymentRelayedEvent",
 			data: []byte(`{"type":"payment-relayed","data":{"amount":200,"payment_hash":"def456"}}`),
 			expected: &Message{
-				Type: "payment-relayed",
+				Type: PaymentRelayed,
 				Data: PaymentRelayedEvent{
 					AmountIn:    200,
 					AmountOut:   100,

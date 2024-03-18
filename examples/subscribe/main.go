@@ -15,10 +15,19 @@ func main() {
 	channel, err := client.Subscribe()
 	if err != nil {
 		panic(err)
-		return
 	}
 
 	for message := range channel {
 		fmt.Println(message)
+		// handle messages here
+
+		switch message.Type {
+		case eclair.ChannelOpened:
+			// handle channel opened event
+		case eclair.ChannelClosed:
+			// handle channel closed event
+		case eclair.PaymentReceived:
+			// handle channel closed event
+		}
 	}
 }
