@@ -8,39 +8,39 @@ import (
 type eventType int
 
 const (
-	PaymentReceived eventType = iota
-	PaymentRelayed
-	PaymentSent
-	PaymentSettlingOnchain
-	PaymentFailed
-	ChannelCreated
-	ChannelOpened
-	ChannelStateChanged
-	ChannelClosed
-	OnionMessageReceived
+	PaymentReceivedEvent eventType = iota
+	PaymentRelayedEvent
+	PaymentSentEvent
+	PaymentSettlingOnchainEvent
+	PaymentFailedEvent
+	ChannelCreatedEvent
+	ChannelOpenedEvent
+	ChannelStateChangedEvent
+	ChannelClosedEvent
+	OnionMessageReceivedEvent
 )
 
 func ToString(kind eventType) string {
 	switch kind {
-	case PaymentReceived:
+	case PaymentReceivedEvent:
 		return "payment-received"
-	case PaymentRelayed:
+	case PaymentRelayedEvent:
 		return "payment-relayed"
-	case PaymentSent:
+	case PaymentSentEvent:
 		return "payment-sent"
-	case PaymentSettlingOnchain:
+	case PaymentSettlingOnchainEvent:
 		return "payment-settling-onchain"
-	case PaymentFailed:
+	case PaymentFailedEvent:
 		return "payment-failed"
-	case ChannelCreated:
+	case ChannelCreatedEvent:
 		return "channel-created"
-	case ChannelOpened:
+	case ChannelOpenedEvent:
 		return "channel-opened"
-	case ChannelStateChanged:
+	case ChannelStateChangedEvent:
 		return "channel-state-changed"
-	case ChannelClosed:
+	case ChannelClosedEvent:
 		return "channel-closed"
-	case OnionMessageReceived:
+	case OnionMessageReceivedEvent:
 		return "onion-message-received"
 	default:
 		return "unknown"
@@ -55,25 +55,25 @@ type Message struct {
 func ToEventType(eventType string) eventType {
 	switch eventType {
 	case "payment-received":
-		return PaymentReceived
+		return PaymentReceivedEvent
 	case "payment-relayed":
-		return PaymentRelayed
+		return PaymentRelayedEvent
 	case "payment-sent":
-		return PaymentSent
+		return PaymentSentEvent
 	case "payment-settling-onchain":
-		return PaymentSettlingOnchain
+		return PaymentSettlingOnchainEvent
 	case "payment-failed":
-		return PaymentFailed
+		return PaymentFailedEvent
 	case "channel-created":
-		return ChannelCreated
+		return ChannelCreatedEvent
 	case "channel-opened":
-		return ChannelOpened
+		return ChannelOpenedEvent
 	case "channel-state-changed":
-		return ChannelStateChanged
+		return ChannelStateChangedEvent
 	case "channel-closed":
-		return ChannelClosed
+		return ChannelClosedEvent
 	case "onion-message-received":
-		return OnionMessageReceived
+		return OnionMessageReceivedEvent
 	default:
 		return -1
 	}
@@ -94,7 +94,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 
 	switch baseEvent.Type {
 	case "payment-received":
-		var event PaymentReceivedEvent
+		var event PaymentReceived
 		if err := json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
@@ -103,7 +103,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 			Data: event,
 		}, nil
 	case "payment-relayed":
-		var event PaymentRelayedEvent
+		var event PaymentRelayed
 		if err := json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
@@ -113,7 +113,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 		}, nil
 
 	case "payment-sent":
-		var event PaymentSentEvent
+		var event PaymentSent
 		if err := json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
@@ -123,7 +123,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 		}, nil
 
 	case "payment-settling-onchain":
-		var event PaymentSettlingOnchainEvent
+		var event PaymentSettlingOnchain
 		if err := json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
@@ -133,7 +133,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 		}, nil
 
 	case "payment-failed":
-		var event PaymentFailedEvent
+		var event PaymentFailed
 		if err := json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
@@ -143,7 +143,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 		}, nil
 
 	case "channel-created":
-		var event ChannelCreatedEvent
+		var event ChannelCreated
 		if err := json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
@@ -153,7 +153,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 		}, nil
 
 	case "channel-opened":
-		var event ChannelOpenedEvent
+		var event ChannelOpened
 		if err := json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
@@ -163,7 +163,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 		}, nil
 
 	case "channel-state-changed":
-		var event ChannelStateChangedEvent
+		var event ChannelStateChanged
 		if err := json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
@@ -173,7 +173,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 		}, nil
 
 	case "channel-closed":
-		var event ChannelClosedEvent
+		var event ChannelClosed
 		if err := json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
@@ -183,7 +183,7 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 		}, nil
 
 	case "onion-message-received":
-		var event OnionMessageReceivedEvent
+		var event OnionMessageReceived
 		if err := json.Unmarshal(data, &event); err != nil {
 			return nil, err
 		}
@@ -195,101 +195,4 @@ func UnmarshalEvent(data []byte) (*Message, error) {
 	default:
 		return nil, fmt.Errorf("unknown event type: %s", baseEvent.Type)
 	}
-}
-
-type PaymentRelayedEvent struct {
-	Type          string    `json:"type"`
-	AmountIn      int       `json:"amountIn"`
-	AmountOut     int       `json:"amountOut"`
-	PaymentHash   string    `json:"paymentHash"`
-	FromChannelId string    `json:"fromChannelId"`
-	ToChannelId   string    `json:"toChannelId"`
-	Timestamp     Timestamp `json:"timestamp"`
-}
-
-type Timestamp struct {
-	Iso  string `json:"iso"`
-	Unix int64  `json:"unix"`
-}
-
-type PaymentReceivedEvent struct {
-	Type        string        `json:"type"`
-	PaymentHash string        `json:"paymentHash"`
-	Parts       []PaymentPart `json:"parts"`
-}
-
-type PaymentFailedEvent struct {
-	Type        string    `json:"type"`
-	ID          string    `json:"id"`
-	PaymentHash string    `json:"paymentHash"`
-	Failures    []Failure `json:"failures"`
-	Timestamp   Timestamp `json:"timestamp"`
-}
-
-type Failure struct {
-	FailureType    string   `json:"failureType"`
-	FailureMessage string   `json:"failureMessage"`
-	FailedRoute    []string `json:"failedRoute"`
-}
-
-type PaymentSentEvent struct {
-	Type            string        `json:"type"`
-	ID              string        `json:"id"`
-	PaymentHash     string        `json:"paymentHash"`
-	PaymentPreimage string        `json:"paymentPreimage"`
-	RecipientAmount int           `json:"recipientAmount"`
-	RecipientNodeId string        `json:"recipientNodeId"`
-	Parts           []PaymentPart `json:"parts"`
-}
-
-type PaymentPart struct {
-	ID            string    `json:"id"`
-	Amount        int       `json:"amount"`
-	FeesPaid      int       `json:"feesPaid"`
-	FromChannelId string    `json:"fromChannelId"`
-	ToChannelId   string    `json:"toChannelId"`
-	Timestamp     Timestamp `json:"timestamp"`
-}
-
-type PaymentSettlingOnchainEvent struct {
-	Type        string    `json:"type"`
-	ID          string    `json:"id"`
-	Amount      int       `json:"amount"`
-	PaymentHash string    `json:"paymentHash"`
-	Timestamp   Timestamp `json:"timestamp"`
-}
-
-type ChannelCreatedEvent struct {
-	Type                  string `json:"type"`
-	RemoteNodeId          string `json:"remoteNodeId"`
-	IsInitiator           bool   `json:"isInitiator"`
-	TemporaryChannelId    string `json:"temporaryChannelId"`
-	InitialFeeRatePerKw   int    `json:"initialFeeratePerKw"`
-	FundingTxFeeRatePerKw int    `json:"fundingTxFeeratePerKw"`
-}
-
-type ChannelOpenedEvent struct {
-	Type         string `json:"type"`
-	RemoteNodeId string `json:"remoteNodeId"`
-	ChannelId    string `json:"channelId"`
-}
-
-type ChannelStateChangedEvent struct {
-	Type          string `json:"type"`
-	ChannelId     string `json:"channelId"`
-	RemoteNodeId  string `json:"remoteNodeId"`
-	PreviousState string `json:"previousState"`
-	CurrentState  string `json:"currentState"`
-}
-
-type ChannelClosedEvent struct {
-	Type        string `json:"type"`
-	ChannelId   string `json:"channelId"`
-	ClosingType string `json:"closingType"`
-}
-
-type OnionMessageReceivedEvent struct {
-	Type        string            `json:"type"`
-	PathId      string            `json:"pathId"`
-	UnknownTlVS map[string]string `json:"unknownTlvs"`
 }

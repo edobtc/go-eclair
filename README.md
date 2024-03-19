@@ -66,11 +66,11 @@ if err != nil {
 // example fo handling events
 for message := range channel {
     switch message.Type {
-    case eclair.ChannelOpened:
+    case eclair.ChannelOpenedEvent:
         // handle channel opened event
-    case eclair.ChannelClosed:
+    case eclair.ChannelClosedEvent:
         // handle channel closed event
-    case eclair.PaymentReceived
+    case eclair.PaymentReceivedEvent
         // handle channel closed event
     //...etc for all/any message type
     }

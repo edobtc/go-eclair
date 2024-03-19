@@ -22,11 +22,11 @@ func main() {
 		// handle messages here
 
 		switch message.Type {
-		case eclair.ChannelOpened:
+		case eclair.ChannelOpenedEvent:
 			// handle channel opened event
-		case eclair.ChannelClosed:
+		case eclair.ChannelClosedEvent:
 			// handle channel closed event
-		case eclair.PaymentReceived:
+		case eclair.PaymentReceivedEvent:
 			// handle channel closed event
 		}
 	}
