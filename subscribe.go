@@ -53,3 +53,31 @@ func (c *Client) Subscribe() (<-chan (Message), error) {
 
 	return ch, nil
 }
+
+// FilteredSubscription allow you to subscribe to a specific set of events
+// and only receive messages for those, vs a firehose of all of them on the
+// websocket
+// This is a convenience method that wraps Subscribe and filters the messages
+// based on the event type
+func (c *Client) FilteredSubscription(evts ...eventType) (<-chan (Message), error) {
+	ch, err := c.Subscribe()
+	if err != nil {
+		return nil, err
+	}
+
+	filteredCh := make(chan Message)
+
+	go func() {
+		defer close(filteredCh)
+
+		for msg := range ch {
+			for _, evt := range evts {
+				if msg.Type == evt {
+					filteredCh <- msg
+				}
+			}
+		}
+	}()
+
+	return filteredCh, nil
+}
