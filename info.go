@@ -24,6 +24,7 @@ type Features struct {
 	Unknown   []interface{}     `json:"unknown"`
 }
 
+// GetInfo returns information about the node.
 func (c *Client) GetInfo() (*Info, error) {
 	info := Info{}
 	data, err := c.Post(infoPath, nil, nil)
