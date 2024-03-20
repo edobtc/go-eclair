@@ -16,7 +16,7 @@ Some helpful examples are available in [the examples folder](./examples)
 client = client.WithBaseURL("http://localhost:8282")
 
 invoice, err := client.CreateInvoice({
-    Description: "Drugqs"
+    Description: "Groceries"
     Amount: 100000,
 })
 if err != nil {
