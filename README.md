@@ -1,4 +1,4 @@
-# go eclai
+# go eclair
 
 ## what?
 
