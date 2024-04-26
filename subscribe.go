@@ -3,8 +3,13 @@ package eclair
 import (
 	"fmt"
 	"net/url"
+	"time"
 
 	"github.com/gorilla/websocket"
+)
+
+const (
+	recoveryInterval = 5 * time.Second
 )
 
 func (c *Client) websocketURL() string {
@@ -20,34 +25,40 @@ func (c *Client) Subscribe() (<-chan (Message), error) {
 	go func() {
 		defer close(ch)
 
-		conn, _, err := websocket.DefaultDialer.Dial(
-			c.websocketURL(),
-			c.settings.AuthHeaders(),
-		)
-
-		if err != nil {
-			err = fmt.Errorf("error connecting to WebSocket: %v", err)
-			fmt.Println(err)
-			return
-		}
-		defer conn.Close()
-
 		for {
-			_, msg, err := conn.ReadMessage()
+			conn, _, err := websocket.DefaultDialer.Dial(
+				c.websocketURL(),
+				c.settings.AuthHeaders(),
+			)
+
 			if err != nil {
-				err = fmt.Errorf("error reading from WebSocket: %v", err)
+				err = fmt.Errorf("error connecting to WebSocket: %v", err)
 				fmt.Println(err)
-				return
+				time.Sleep(recoveryInterval)
+				continue
 			}
 
-			event, err := UnmarshalEvent(msg)
-			if err != nil {
-				err = fmt.Errorf("error unmarshaling event: %v", err)
-				fmt.Println(err)
-				return
-			}
+			func() {
+				defer conn.Close()
 
-			ch <- *event
+				for {
+					_, msg, err := conn.ReadMessage()
+					if err != nil {
+						if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+							fmt.Printf("error reading from WebSocket: %v\n", err)
+						}
+						return // Exit the inner function to reconnect
+					}
+
+					event, err := UnmarshalEvent(msg)
+					if err != nil {
+						fmt.Printf("error unmarshaling event: %v\n", err)
+						continue
+					}
+
+					ch <- *event
+				}
+			}()
 		}
 	}()
 
